@@ -1,3 +1,7 @@
 .el-form-item__label {
   font-weight: 600;
 }
+
+.el-table th.el-table__cell>.cell {
+  word-break: normal;
+}

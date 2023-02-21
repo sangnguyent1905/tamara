@@ -1,63 +1,86 @@
 <template>
   <div v-if="!!form" class="customer-form">
     <el-form :model="form" :rules="rules" ref="form">
-      <div class="flex align-items-center column-gap-20">
-        <div class="w-50">
+      <div class="flex align-items-center xs-flex-wrap column-gap-20">
+        <div class="w-50 xs-w-100">
           <el-form-item label="First Name" prop="first_name">
             <el-input v-model="form.first_name"></el-input>
           </el-form-item>
         </div>
-        <div class="w-50">
+        <div class="w-50 xs-w-100">
           <el-form-item label="Last Name" prop="last_name">
             <el-input v-model="form.last_name"></el-input>
           </el-form-item>
         </div>
       </div>
-      <el-form-item label="National ID" prop="national_id">
-        <el-input v-model="form.national_id"></el-input>
-      </el-form-item>
-      <el-form-item label="Email" prop="email">
-        <el-input v-model="form.email"></el-input>
-      </el-form-item>
-      <el-form-item label="Phone" prop="phone_number">
-        <el-input v-model="form.phone_number" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.gender">
+
+      <div class="flex align-items-center xs-flex-wrap column-gap-20">
+        <div class="w-50 xs-w-100">
+          <el-form-item label="National ID" prop="national_id">
+            <el-input v-model.number="form.national_id"></el-input>
+          </el-form-item>
+        </div>
+        <div class="w-50 xs-w-100">
+          <el-form-item label="Email" prop="email">
+            <el-input v-model="form.email"></el-input>
+          </el-form-item>
+        </div>
+      </div>
+
+      <div class="flex align-items-center xs-flex-wrap column-gap-20">
+        <div class="w-50 xs-w-100">
+          <el-form-item label="Phone" prop="phone_number">
+            <el-input v-model="form.phone_number" autocomplete="off"></el-input>
+          </el-form-item>
+        </div>
+        <div class="w-50 xs-w-100">
+          <el-form-item label="Birth Date">
+            <el-date-picker
+              type="date"
+              placeholder="Pick a date"
+              v-model="form.birth_date"
+              style="width: 100%"
+            ></el-date-picker>
+          </el-form-item>
+        </div>
+      </div>
+
+      <el-form-item label="Gender">
+        <el-radio-group class="w-100" v-model="form.gender">
           <el-radio label="MALE" value="MALE"></el-radio>
           <el-radio label="FEMALE" value="FEMALE"></el-radio>
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="Birth Date">
-        <el-date-picker
-          type="date"
-          placeholder="Pick a date"
-          v-model="form.birth_date"
-          style="width: 100%"
-        ></el-date-picker>
-      </el-form-item>
+      <div class="flex align-items-center xs-flex-wrap column-gap-20">
+        <div class="w-25 xs-w-100">
+          <el-form-item label="Country">
+            <el-select
+              class="w-100"
+              v-model="form.country_code"
+            >
+              <el-option label="South Africa" value="SA"></el-option>
+              <el-option label="Viet Nam" value="VN"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="w-25 xs-w-100">
+          <el-form-item label="City">
+            <el-input v-model="form.address.city"></el-input>
+          </el-form-item>
+        </div>
+        <div class="w-25 xs-w-100">
+          <el-form-item label="Street">
+            <el-input v-model="form.address.street"></el-input>
+          </el-form-item>
+        </div>
+        <div class="w-25 xs-w-100">
+          <el-form-item label="Postal Code">
+            <el-input v-model="form.address.postal_code"></el-input>
+          </el-form-item>
+        </div>
+      </div>
 
-      <el-form-item label="Country">
-        <el-select
-          class="w-100"
-          v-model="form.country_code"
-          placeholder="please select your country"
-        >
-          <el-option label="South Africa" value="SA"></el-option>
-          <el-option label="Viet Nam" value="VN"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="Street">
-        <el-input v-model="form.address.street"></el-input>
-      </el-form-item>
-      <el-form-item label="City">
-        <el-input v-model="form.address.city"></el-input>
-      </el-form-item>
-      <el-form-item label="Postal Code">
-        <el-input v-model="form.address.postal_code"></el-input>
-      </el-form-item>
       <el-form-item label="ACTIVE">
         <el-switch
           v-model="form.status"
@@ -67,7 +90,9 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit()">Update</el-button>
+        <el-button type="primary" @click="onSubmit">{{
+          data.customer_id ? "Update" : "Create"
+        }}</el-button>
         <nuxt-link to="/customers">
           <el-button> Cancel</el-button>
         </nuxt-link>
@@ -88,10 +113,10 @@ export default {
   data() {
     const checkPhone = (rule, value, callback) => {
       const numberRegex = /^-?\d+$/;
-      debugger
       if (!numberRegex.test(value)) {
-        return callback(new Error("Please input valid phone number"));
+        callback(new Error("Please input valid phone number"));
       }
+      callback();
     };
 
     return {
@@ -117,6 +142,11 @@ export default {
             required: true,
             message: "Please input national id",
             trigger: "blur",
+          },
+          {
+            type: "number",
+            message: "Please input correct national id",
+            trigger: ["blur", "change"],
           },
         ],
         email: [
@@ -152,7 +182,7 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.$emit("valueChange", this.form);
-          return true;
+          return;
         }
         return false;
       });

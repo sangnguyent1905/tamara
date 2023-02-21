@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="header">
+    <div class="header flex xs-flex-wrap align-items-center justify-content-between">
       <h1 class="title">Customer Management</h1>
       <div class="btn-create">
         <nuxt-link to="/customers/create">
@@ -20,10 +20,10 @@
         <el-table-column prop="gender" label="Gender"> </el-table-column>
         <el-table-column prop="email" label="Address">
           <template slot-scope="scope">
-            <span>{{ scope.row.address.street }}</span
-            >, <span>{{ scope.row.address.city }}</span
-            >,
-            <span>{{ scope.row.address.postal_code }}</span>
+            <span>
+              {{ scope.row.address.street }} , {{ scope.row.address.city }} ,
+              {{ scope.row.address.postal_code }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="Status">
@@ -38,16 +38,19 @@
         </el-table-column>
         <el-table-column label="Operations">
           <template slot-scope="scope">
-            <el-button size="mini" @click="editCustomer(scope.row)">
-              Edit
-            </el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="deleteCustomer(scope.$index, scope.row)"
-            >
-              Delete
-            </el-button>
+            <div class="flex align-items flex-wrap gap-10">
+              <el-button size="mini" @click="editCustomer(scope.row)">
+                Edit
+              </el-button>
+              <el-button
+                class="ml-0"
+                size="mini"
+                type="danger"
+                @click="deleteCustomer(scope.row)"
+              >
+                Delete
+              </el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -64,8 +67,11 @@
 </template>
 
 <script>
+
 export default {
   mounted() {
+    this.$initData();
+
     this.loadData();
   },
 
@@ -91,58 +97,21 @@ export default {
       this.page = page;
     },
 
-    randomNum(index) {
-      let str = "" + index;
-      let pad = "000";
-      return pad.substring(0, pad.length - str.length) + str;
-    },
-
     editCustomer(row) {
       this.$router.push(`/customers/${row.customer_id}`);
     },
 
-    deleteCustomer(index, row) {
-      this.tableData.splice(index, 1);
+    deleteCustomer(row) {
+      this.tableData = this.tableData.filter(
+        (item) => item.customer_id != row.customer_id
+      );
 
       localStorage.setItem("customers", JSON.stringify(this.tableData));
     },
 
-    loadData() {
-      const data = localStorage.getItem("customers");
-      if (data) {
-        this.tableData = JSON.parse(data);
-        return;
-      }
-
-      this.initData();
-    },
-
-    initData() {
-      const customers = [];
-      for (let i = 1; i <= 500; i++) {
-        customers.push({
-          customer_id: `${i}`,
-          email: `customer${i}@tamara.co`,
-          first_name: "customer",
-          last_name: `#${i}`,
-          phone_number: `966501234${this.randomNum(i)}`,
-          gender: i % 2 === 0 ? "MALE" : "FEMALE",
-          birth_date: "2002-03-29T00:00:00+00:00",
-          country_code: i % 2 === 0 ? "SA" : "VN",
-          address: {
-            street: `${this.randomNum(i)} Al Urubah Rd`,
-            city: "Riyadh",
-            postal_code: this.randomNum(i),
-          },
-          is_email_verified: false,
-          is_id_verified: true,
-          national_id: "123456789",
-          status: "ACTIVE",
-        });
-      }
-      localStorage.setItem("customers", JSON.stringify(customers));
-
-      this.tableData = customers;
+    async loadData() {
+      const data = await this.$getCustomers();
+      this.tableData = data;
     },
   },
 };
@@ -150,15 +119,12 @@ export default {
 
 <style lang="scss">
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 25px;
 }
 
 .body {
   padding: 25px;
-  text-align: center;
+  overflow: auto;
 }
 
 .pagging {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="!!form" class="create-customer">
     <h1>Create Customer</h1>
-    <customer-form :data="form" @valueChange="onValueChange($event)"/>
+    <customer-form :data="form" @valueChange="onValueChange($event)" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import CustomerForm from "~/components/CustomerForm.vue";
 
 export default {
   components: {
-    CustomerForm
+    CustomerForm,
   },
 
   data() {
@@ -20,7 +20,7 @@ export default {
         first_name: null,
         last_name: null,
         phone_number: null,
-        gender: 'MALE',
+        gender: "MALE",
         birth_date: null,
         country_code: null,
         address: {
@@ -41,31 +41,35 @@ export default {
   },
 
   methods: {
-    loadData() {
+    async  loadData() {
       const data = localStorage.getItem("customers");
       this.customers = data ? JSON.parse(data) : [];
     },
 
     save() {
-      this.customers.push(this.form);
-      localStorage.setItem("customers", JSON.stringify(this.customers));
+      const ids = this.customers.map((item) => +item.customer_id);
+      const maxId = Math.max(...ids);
 
-      this.$router.push("/customers");
+      if (Number.isInteger(maxId)) {
+        this.form.customer_id = maxId + 1;
+        this.customers.push(this.form);
+        localStorage.setItem("customers", JSON.stringify(this.customers));
+        this.$router.push("/customers");
+      }
     },
 
     onValueChange(value) {
       this.form = value;
-
       this.save();
-    }
+    },
   },
 };
 </script>
 
 <style>
-  .create-customer {
-    max-width: 1024px;
-    margin: auto;
-  }
+.create-customer {
+  max-width: 1024px;
+  margin: auto;
+  padding: 25px;
+}
 </style>
-

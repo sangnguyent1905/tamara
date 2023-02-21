@@ -31,14 +31,8 @@ export default {
   },
 
   methods: {
-    loadData() {
-      const data = localStorage.getItem("customers");
-      if (data && this.customer_id) {
-        this.customers = JSON.parse(data) || [];
-        this.form = this.customers.find(
-          (item) => item.customer_id.toString() === this.customer_id
-        );
-      }
+    async loadData() {
+      this.form = await this.$getCustomer({customer_id: this.customer_id});
     },
 
     save() {
@@ -65,5 +59,6 @@ export default {
 .update-customer {
   max-width: 1024px;
   margin: auto;
+  padding: 25px;
 }
 </style>
