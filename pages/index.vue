@@ -1,11 +1,12 @@
 <template>
-  <Tutorial/>
+  <div>
+    <nuxt-link to="/customers">Customer Management</nuxt-link>
+  </div>
 </template>
-
-<script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
-  name: 'IndexPage'
-})
+<script>
+export default {
+  created() {
+    this.$router.push("/customers");
+  },
+};
 </script>
