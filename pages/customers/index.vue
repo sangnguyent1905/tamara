@@ -1,10 +1,16 @@
 <template>
   <div class="customers">
+    <div class="flex justify-content-end">
+      <el-select class="xs-w-100" v-model="userRole">
+        <el-option label="Admin" value="Admin"></el-option>
+        <el-option label="User" value="User"></el-option>
+      </el-select>
+    </div>
     <div
       class="customers__header flex xs-flex-wrap align-items-center justify-content-between"
     >
       <h1 class="customers__title">Customer Management</h1>
-      <div class="btn-create">
+      <div v-if="userRole === roles.ADMIN" class="btn-create">
         <nuxt-link to="/customers/create">
           <el-button size="medium" type="success"> Create Customer </el-button>
         </nuxt-link>
@@ -49,7 +55,7 @@
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="Operations">
+        <el-table-column v-if="userRole === roles.ADMIN" label="Operations">
           <template slot-scope="scope">
             <div class="flex align-items flex-wrap gap-10">
               <el-button size="mini" @click="editCustomer(scope.row)">
@@ -80,7 +86,13 @@
 </template>
 
 <script>
+import { CUSTOMER_ROLE } from "~/constants";
+
 export default {
+  created() {
+    this.roles = CUSTOMER_ROLE;
+  },
+
   async mounted() {
     await this.$initData();
 
@@ -101,6 +113,8 @@ export default {
       tableData: [],
       page: 1,
       pageSize: 5,
+      userRole: CUSTOMER_ROLE.ADMIN,
+      roles: null,
     };
   },
 
@@ -114,7 +128,7 @@ export default {
     },
 
     deleteCustomer(row) {
-      this.$confirm("Do you want to delete this customer?", "Warning", {
+      this.$confirm("Do you want to delete this customer?", "Delete", {
         confirmButtonText: "Yes",
         cancelButtonText: "No",
         type: "warning",
@@ -144,6 +158,7 @@ export default {
 .customers {
   &__title {
     margin-bottom: 0;
+    margin-top: 0;
   }
 
   &__header {
