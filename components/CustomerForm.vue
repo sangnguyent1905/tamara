@@ -34,7 +34,7 @@
           </el-form-item>
         </div>
         <div class="w-50 xs-w-100">
-          <el-form-item label="Birth Date">
+          <el-form-item label="Birth Date" prop="birth_date">
             <el-date-picker
               type="date"
               placeholder="Pick a date"
@@ -165,6 +165,13 @@ export default {
             trigger: "blur",
           },
         ],
+        birth_date: [
+          {
+            required: true,
+            message: "Please input birthday",
+            trigger: "blur",
+          },
+        ],
       },
     };
   },
@@ -182,9 +189,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.el-form-item__label {
-  font-weight: 600;
-}
-</style>

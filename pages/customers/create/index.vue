@@ -36,18 +36,9 @@ export default {
     };
   },
 
-  mounted() {
-    this.loadData();
-  },
-
   methods: {
-    async  loadData() {
-      const data = localStorage.getItem("customers");
-      this.customers = data ? JSON.parse(data) : [];
-    },
-
     async save() {
-      const data = await this.$create(this.form);
+      const data = await this.$createCustomer(this.form);
 
       if (data) {
         this.$message({

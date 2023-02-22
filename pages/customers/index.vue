@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <div class="header flex xs-flex-wrap align-items-center justify-content-between">
-      <h1 class="title">Customer Management</h1>
+  <div class="customers">
+    <div
+      class="customers__header flex xs-flex-wrap align-items-center justify-content-between"
+    >
+      <h1 class="customers__title">Customer Management</h1>
       <div class="btn-create">
         <nuxt-link to="/customers/create">
           <el-button size="medium" type="success"> Create Customer </el-button>
@@ -9,16 +11,15 @@
       </div>
     </div>
 
-    <div class="body">
-      <el-table :data="pagedTableData" style="width: 100%">
+    <div class="customers__body">
+      <el-table :data="pagedTableData" class="w-100">
         <el-table-column prop="first_name" label="First Name">
         </el-table-column>
         <el-table-column prop="last_name" label="Last Name"> </el-table-column>
         <el-table-column prop="birth_date" label="Birthday">
-           
           <template slot-scope="scope">
             <span>
-              {{ scope.row.birth_date | formatDate('YYYY MMM DD')  }}
+              {{ scope.row.birth_date | formatDate("YYYY MMM DD") }}
             </span>
           </template>
         </el-table-column>
@@ -27,9 +28,14 @@
         <el-table-column prop="gender" label="Gender"> </el-table-column>
         <el-table-column prop="email" label="Address">
           <template slot-scope="scope">
-            <span>
-              {{ scope.row.address.street }} , {{ scope.row.address.city }} ,
-              {{ scope.row.address.postal_code }}
+            <span v-if="scope.row.address.street">
+              {{ scope.row.address.street }}
+            </span>
+            <span v-if="scope.row.address.city">
+              , {{ scope.row.address.city }}
+            </span>
+            <span v-if="scope.row.address.postal_code">
+              , {{ scope.row.address.postal_code }}
             </span>
           </template>
         </el-table-column>
@@ -62,7 +68,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        class="pagging"
+        class="customers__pagging"
         :page-size="pageSize"
         :total="tableData.length"
         layout="prev, pager, next"
@@ -74,7 +80,6 @@
 </template>
 
 <script>
-
 export default {
   mounted() {
     this.$initData();
@@ -109,11 +114,22 @@ export default {
     },
 
     deleteCustomer(row) {
-      this.tableData = this.tableData.filter(
-        (item) => item.customer_id != row.customer_id
-      );
+      this.$confirm("Do you want to delete this customer?", "Warning", {
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        type: "warning",
+      }).then(async () => {
+        const data = await this.$deleteCustomer();
 
-      localStorage.setItem("customers", JSON.stringify(this.tableData));
+        if (data) {
+          this.$message({
+            type: "success",
+            message: "The customer have been successfully deleted!",
+          });
+
+          this.loadData();
+        }
+      });
     },
 
     async loadData() {
@@ -125,21 +141,23 @@ export default {
 </script>
 
 <style lang="scss">
-.header {
-  padding: 25px;
-}
+.customers {
+  &__title {
+    margin-bottom: 0;
+  }
 
-.body {
-  padding: 25px;
-  overflow: auto;
-}
+  &__header {
+    padding: 25px;
+  }
 
-.pagging {
-  padding: 15px 0;
-  float: right;
-}
+  &__body {
+    padding: 25px;
+    overflow: auto;
+  }
 
-.title {
-  margin-bottom: 0;
+  &__pagging {
+    padding: 15px 0;
+    float: right;
+  }
 }
 </style>

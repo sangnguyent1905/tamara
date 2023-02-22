@@ -36,7 +36,7 @@ export default {
     },
 
     async save() {
-      const data = await this.$update(this.form);
+      const data = await this.$updateCustomer(this.form);
 
       if (data) {
         this.$message({

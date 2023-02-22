@@ -58,7 +58,23 @@ export default {
     return await data.find((item) => item.customer_id === query.customer_id);
   },
 
-  create: async (payload) => {
+  
+  deleteCustomer: async (payload) => {
+    const jsonData = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOMERS);
+    const data = jsonData ? JSON.parse(jsonData) : [];
+    const index = data.findIndex(
+      (item) => item.customer_id === payload.customer_id
+    );
+    if (index >= 0) {
+      data.splice(index, 1);
+      localStorage.setItem(LOCAL_STORAGE_KEY.CUSTOMERS, JSON.stringify(data));
+      return await payload;
+    }
+
+    return await null;
+  },
+
+  createCustomer: async (payload) => {
     const jsonData = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOMERS);
     const data = jsonData ? JSON.parse(jsonData) : [];
     const ids = data.map((item) => +item.customer_id);
@@ -75,7 +91,7 @@ export default {
     return await null;
   },
 
-  update: async (payload) => {
+  updateCustomer: async (payload) => {
     const jsonData = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOMERS);
     const data = jsonData ? JSON.parse(jsonData) : [];
     const index = data.findIndex(
