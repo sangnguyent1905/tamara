@@ -16,7 +16,7 @@
         <el-table-column prop="first_name" label="First Name">
         </el-table-column>
         <el-table-column prop="last_name" label="Last Name"> </el-table-column>
-        <el-table-column prop="birth_date" label="Birthday">
+        <el-table-column prop="birth_date" label="Birth date">
           <template slot-scope="scope">
             <span>
               {{ scope.row.birth_date | formatDate("YYYY MMM DD") }}

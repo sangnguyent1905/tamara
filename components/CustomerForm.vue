@@ -1,15 +1,15 @@
 <template>
-  <div v-if="!!form" class="customer-form">
-    <el-form :model="form" :rules="rules" ref="form">
+  <div class="customer-form">
+    <el-form v-if="form" :model="form" :rules="rules" ref="form">
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-50 xs-w-100">
           <el-form-item label="First Name" prop="first_name">
-            <el-input v-model="form.first_name"></el-input>
+            <el-input v-model="form.first_name" id="first_name"></el-input>
           </el-form-item>
         </div>
         <div class="w-50 xs-w-100">
           <el-form-item label="Last Name" prop="last_name">
-            <el-input v-model="form.last_name"></el-input>
+            <el-input v-model="form.last_name" id="last_name"></el-input>
           </el-form-item>
         </div>
       </div>
@@ -17,12 +17,12 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-50 xs-w-100">
           <el-form-item label="National ID" prop="national_id">
-            <el-input v-model="form.national_id"></el-input>
+            <el-input v-model="form.national_id" id="national_id"></el-input>
           </el-form-item>
         </div>
         <div class="w-50 xs-w-100">
           <el-form-item label="Email" prop="email">
-            <el-input v-model="form.email"></el-input>
+            <el-input v-model="form.email" id="email"></el-input>
           </el-form-item>
         </div>
       </div>
@@ -30,13 +30,14 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-50 xs-w-100">
           <el-form-item label="Phone" prop="phone_number">
-            <el-input v-model="form.phone_number" autocomplete="off"></el-input>
+            <el-input v-model="form.phone_number" autocomplete="off" id="phone_number"></el-input>
           </el-form-item>
         </div>
         <div class="w-50 xs-w-100">
           <el-form-item label="Birth Date" prop="birth_date">
             <el-date-picker
               type="date"
+              id="birth_date"
               placeholder="Pick a date"
               v-model="form.birth_date"
               style="width: 100%"
@@ -55,7 +56,7 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-25 xs-w-100">
           <el-form-item label="Country">
-            <el-select class="w-100" v-model="form.country_code">
+            <el-select class="w-100" v-model="form.country_code" name="country_code">
               <el-option label="South Africa" value="SA"></el-option>
               <el-option label="Viet Nam" value="VN"></el-option>
             </el-select>
@@ -87,8 +88,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">
-          {{ data.customer_id ? "Update" : "Create" }}
+        <el-button type="primary" @click="onSubmit" name="submit">
+          {{ data && data.customer_id ? "Update" : "Create" }}
         </el-button>
         <nuxt-link to="/customers">
           <el-button> Cancel</el-button>
