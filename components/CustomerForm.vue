@@ -102,7 +102,9 @@
 <script>
 export default {
   name: "CustomerForm",
-  props: ["data"],
+  props: {
+    data: Object
+  },
 
   mounted() {
     this.form = this.data;

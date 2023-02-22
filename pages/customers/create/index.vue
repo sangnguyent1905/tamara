@@ -39,14 +39,19 @@ export default {
   methods: {
     async save() {
       const data = await this.$createCustomer(this.form);
-
       if (data) {
         this.$message({
-          message: 'New customer have been successfully saved!',
-          type: 'success'
+          message: "New customer have been successfully saved!",
+          type: "success",
         });
         this.$router.push("/customers");
+        return;
       }
+
+      this.$message({
+        message: "New customer haven't been saved!",
+        type: "error",
+      });
     },
 
     onValueChange(value) {
