@@ -47,7 +47,7 @@
       </div>
 
       <el-form-item label="Gender">
-        <el-radio-group class="w-100" v-model="form.gender">
+        <el-radio-group id="gender" class="w-100" v-model="form.gender">
           <el-radio label="MALE" value="MALE"></el-radio>
           <el-radio label="FEMALE" value="FEMALE"></el-radio>
         </el-radio-group>
@@ -56,7 +56,7 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-25 xs-w-100">
           <el-form-item label="Country">
-            <el-select class="w-100" v-model="form.country_code" name="country_code">
+            <el-select class="w-100" v-model="form.country_code" id="country_code">
               <el-option label="South Africa" value="SA"></el-option>
               <el-option label="Viet Nam" value="VN"></el-option>
             </el-select>
@@ -64,17 +64,17 @@
         </div>
         <div class="w-25 xs-w-100">
           <el-form-item label="City">
-            <el-input v-model="form.address.city"></el-input>
+            <el-input v-model="form.address.city" id="city"></el-input>
           </el-form-item>
         </div>
         <div class="w-25 xs-w-100">
           <el-form-item label="Street">
-            <el-input v-model="form.address.street"></el-input>
+            <el-input v-model="form.address.street" id="street"></el-input>
           </el-form-item>
         </div>
         <div class="w-25 xs-w-100">
           <el-form-item label="Postal Code">
-            <el-input v-model="form.address.postal_code"></el-input>
+            <el-input v-model="form.address.postal_code" id="postal_code"></el-input>
           </el-form-item>
         </div>
       </div>
@@ -88,7 +88,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit" name="submit">
+        <el-button type="primary" @click="onSubmit" id="btn_submit">
           {{ data && data.customer_id ? "Update" : "Create" }}
         </el-button>
         <nuxt-link to="/customers">

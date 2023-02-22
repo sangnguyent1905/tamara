@@ -81,8 +81,8 @@
 
 <script>
 export default {
-  mounted() {
-    this.$initData();
+  async mounted() {
+    await this.$initData();
 
     this.loadData();
   },
