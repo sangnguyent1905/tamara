@@ -46,14 +46,14 @@ export default {
       this.customers = data ? JSON.parse(data) : [];
     },
 
-    save() {
-      const ids = this.customers.map((item) => +item.customer_id);
-      const maxId = Math.max(...ids);
+    async save() {
+      const data = await this.$create(this.form);
 
-      if (Number.isInteger(maxId)) {
-        this.form.customer_id = maxId + 1;
-        this.customers.push(this.form);
-        localStorage.setItem("customers", JSON.stringify(this.customers));
+      if (data) {
+        this.$message({
+          message: 'New customer have been successfully saved!',
+          type: 'success'
+        });
         this.$router.push("/customers");
       }
     },

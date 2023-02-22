@@ -35,15 +35,16 @@ export default {
       this.form = await this.$getCustomer({customer_id: this.customer_id});
     },
 
-    save() {
-      (this.customers || []).forEach((item) => {
-        if (item.customer_id === this.customer_id) {
-          item = { ...this.form };
-        }
-      });
-      localStorage.setItem("customers", JSON.stringify(this.customers));
+    async save() {
+      const data = await this.$update(this.form);
 
-      this.$router.push("/customers");
+      if (data) {
+        this.$message({
+          message: 'Your changes have been successfully saved!',
+          type: 'success'
+        });
+        this.$router.push("/customers");
+      }
     },
 
     onValueChange(value) {

@@ -17,7 +17,7 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-50 xs-w-100">
           <el-form-item label="National ID" prop="national_id">
-            <el-input v-model.number="form.national_id"></el-input>
+            <el-input v-model="form.national_id"></el-input>
           </el-form-item>
         </div>
         <div class="w-50 xs-w-100">
@@ -55,10 +55,7 @@
       <div class="flex align-items-center xs-flex-wrap column-gap-20">
         <div class="w-25 xs-w-100">
           <el-form-item label="Country">
-            <el-select
-              class="w-100"
-              v-model="form.country_code"
-            >
+            <el-select class="w-100" v-model="form.country_code">
               <el-option label="South Africa" value="SA"></el-option>
               <el-option label="Viet Nam" value="VN"></el-option>
             </el-select>
@@ -90,9 +87,9 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">{{
-          data.customer_id ? "Update" : "Create"
-        }}</el-button>
+        <el-button type="primary" @click="onSubmit">
+          {{ data.customer_id ? "Update" : "Create" }}
+        </el-button>
         <nuxt-link to="/customers">
           <el-button> Cancel</el-button>
         </nuxt-link>
@@ -142,11 +139,6 @@ export default {
             required: true,
             message: "Please input national id",
             trigger: "blur",
-          },
-          {
-            type: "number",
-            message: "Please input correct national id",
-            trigger: ["blur", "change"],
           },
         ],
         email: [

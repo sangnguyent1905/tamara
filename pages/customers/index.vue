@@ -14,7 +14,14 @@
         <el-table-column prop="first_name" label="First Name">
         </el-table-column>
         <el-table-column prop="last_name" label="Last Name"> </el-table-column>
-        <el-table-column prop="birth_date" label="Birthday"> </el-table-column>
+        <el-table-column prop="birth_date" label="Birthday">
+           
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.birth_date | formatDate('YYYY MMM DD')  }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="email" label="Email"> </el-table-column>
         <el-table-column prop="phone_number" label="Phone"> </el-table-column>
         <el-table-column prop="gender" label="Gender"> </el-table-column>

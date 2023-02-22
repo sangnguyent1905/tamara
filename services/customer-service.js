@@ -34,7 +34,10 @@ export default {
           status: "ACTIVE",
         });
       }
-      localStorage.setItem(LOCAL_STORAGE_KEY.CUSTOMERS, JSON.stringify(customers));
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.CUSTOMERS,
+        JSON.stringify(customers)
+      );
       return await customers;
     }
 
@@ -55,11 +58,35 @@ export default {
     return await data.find((item) => item.customer_id === query.customer_id);
   },
 
-  // create: async  (data) => {
-  //   return await client(baseUrl).post('endpoint_url', data)
-  // }
+  create: async (payload) => {
+    const jsonData = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOMERS);
+    const data = jsonData ? JSON.parse(jsonData) : [];
+    const ids = data.map((item) => +item.customer_id);
+    const maxId = ids.length > 0 ? Math.max(...ids) : 0;
 
-  // update: async  (data) => {
-  //   return await client(baseUrl).post('endpoint_url', data)
-  // }
+    if (Number.isInteger(maxId)) {
+      payload.customer_id = `${maxId + 1}`;
+      data.push(payload);
+
+      localStorage.setItem(LOCAL_STORAGE_KEY.CUSTOMERS, JSON.stringify(data));
+      return await payload.customer_id;
+    }
+
+    return await null;
+  },
+
+  update: async (payload) => {
+    const jsonData = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOMERS);
+    const data = jsonData ? JSON.parse(jsonData) : [];
+    const index = data.findIndex(
+      (item) => item.customer_id === payload.customer_id
+    );
+    if (index >= 0) {
+      data[index] = { ...payload };
+      localStorage.setItem(LOCAL_STORAGE_KEY.CUSTOMERS, JSON.stringify(data));
+      return await payload;
+    }
+
+    return await null;
+  },
 };
