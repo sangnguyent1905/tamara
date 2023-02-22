@@ -119,7 +119,7 @@ export default {
         cancelButtonText: "No",
         type: "warning",
       }).then(async () => {
-        const data = await this.$deleteCustomer();
+        const data = await this.$deleteCustomer(row);
 
         if (data) {
           this.$message({
